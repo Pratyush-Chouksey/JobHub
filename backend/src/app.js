@@ -9,6 +9,12 @@ import { fileURLToPath } from 'url';
 import { connectDB } from './config/db.js';
 import errorHandler from './middleware/error.js';
 
+// Models (Ensure registration)
+import './models/User.js';
+import './models/Company.js';
+import './models/Job.js';
+import './models/Application.js';
+
 // Route files
 import authRoutes from './routes/auth.routes.js';
 import jobRoutes from './routes/job.routes.js';
@@ -30,7 +36,9 @@ connectDB();
 // Middleware
 app.use(helmet());
 app.use(cors({
-    origin: true,
+    origin: (origin, callback) => {
+        callback(null, origin || "*");
+    },
     credentials: true
 }));
 app.use(morgan('dev'));
