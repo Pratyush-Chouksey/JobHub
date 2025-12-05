@@ -7,6 +7,7 @@ import ErrorBoundary from './components/ui/ErrorBoundary';
 
 import LandingPage from './pages/LandingPage';
 import JobBoard from './pages/JobBoard';
+import JobDetailsPage from './pages/JobDetailsPage';
 import EmployerDashboard from './pages/employer/EmployerDashboard';
 import ProfilePage from './pages/profile/ProfilePage';
 import ResumeBuilder from './components/resume/ResumeBuilder';
@@ -38,6 +39,7 @@ function App() {
                                 <Route path="/register" element={<RegisterPage />} />
 
                                 <Route path="/jobs" element={<JobBoard />} />
+                                <Route path="/jobs/:id" element={<JobDetailsPage />} />
 
                                 {/* Employer Routes */}
                                 <Route path="/employer/dashboard" element={<EmployerDashboard page="dashboard" />} />

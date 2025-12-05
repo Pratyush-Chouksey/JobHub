@@ -30,7 +30,9 @@ const JobCard = ({ job }) => {
                     {job.type}
                 </span>
                 <span className="rounded-full bg-emerald-500/10 text-emerald-400 px-3 py-1 border border-emerald-500/20">
-                    ${job.salary}
+                    {typeof job.salary === 'object'
+                        ? `${job.salary.currency || '$'}${job.salary.min.toLocaleString()} - ${job.salary.max.toLocaleString()}`
+                        : job.salary}
                 </span>
             </div>
 
