@@ -1,27 +1,19 @@
-import { cn } from '../../utils/cn';
+import * as React from "react"
 
-const Input = ({ label, error, className, id, ...props }) => {
-    return (
-        <div className="relative">
-            <input
-                id={id}
-                className={cn(
-                    "peer block w-full rounded-xl border border-slate-700 bg-slate-900/50 px-4 pb-3 pt-5 text-sm text-white focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all placeholder-transparent",
-                    error && "border-red-500 focus:border-red-500 focus:ring-red-500",
-                    className
-                )}
-                placeholder={label}
-                {...props}
-            />
-            <label
-                htmlFor={id}
-                className="absolute left-4 top-4 z-10 origin-[0] -translate-y-2.5 scale-75 text-xs text-slate-400 transition-all peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:-translate-y-2.5 peer-focus:scale-75 peer-focus:text-blue-500"
-            >
-                {label}
-            </label>
-            {error && <p className="mt-1 text-xs text-red-500">{error}</p>}
-        </div>
-    );
-};
+import { cn } from "@/lib/utils"
 
-export default Input;
+const Input = React.forwardRef(({ className, type, ...props }, ref) => {
+  return (
+    (<input
+      type={type}
+      className={cn(
+        "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+        className
+      )}
+      ref={ref}
+      {...props} />)
+  );
+})
+Input.displayName = "Input"
+
+export { Input }

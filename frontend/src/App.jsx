@@ -1,61 +1,84 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Toaster } from 'react-hot-toast';
-import { HelmetProvider } from 'react-helmet-async'; // SEO
-import { AuthProvider } from './context/AuthContext';
-import { ThemeProvider } from './context/ThemeContext';
-import ErrorBoundary from './components/ui/ErrorBoundary';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import Navbar from './components/shared/Navbar'
+import Login from './components/auth/Login'
+import Signup from './components/auth/Signup'
+import Home from './components/Home'
+import Jobs from './components/Jobs'
+import Browse from './components/Browse'
+import Profile from './components/Profile'
+import JobDescription from './components/JobDescription'
+import Companies from './components/admin/Companies'
+import CompanyCreate from './components/admin/CompanyCreate'
+import CompanySetup from './components/admin/CompanySetup'
+import AdminJobs from "./components/admin/AdminJobs";
+import PostJob from './components/admin/PostJob'
+import Applicants from './components/admin/Applicants'
+import ProtectedRoute from './components/admin/ProtectedRoute'
 
-import LandingPage from './pages/LandingPage';
-import JobBoard from './pages/JobBoard';
-import JobDetailsPage from './pages/JobDetailsPage';
-import EmployerDashboard from './pages/employer/EmployerDashboard';
-import ProfilePage from './pages/profile/ProfilePage';
-import ResumeBuilder from './components/resume/ResumeBuilder';
-import LoginPage from './pages/auth/LoginPage';
-import RegisterPage from './pages/auth/RegisterPage';
 
+const appRouter = createBrowserRouter([
+  {
+    path: '/',
+    element: <Home />
+  },
+  {
+    path: '/login',
+    element: <Login />
+  },
+  {
+    path: '/signup',
+    element: <Signup />
+  },
+  {
+    path: "/jobs",
+    element: <Jobs />
+  },
+  {
+    path: "/description/:id",
+    element: <JobDescription />
+  },
+  {
+    path: "/browse",
+    element: <Browse />
+  },
+  {
+    path: "/profile",
+    element: <Profile />
+  },
+  // admin ke liye yha se start hoga
+  {
+    path:"/admin/companies",
+    element: <ProtectedRoute><Companies/></ProtectedRoute>
+  },
+  {
+    path:"/admin/companies/create",
+    element: <ProtectedRoute><CompanyCreate/></ProtectedRoute> 
+  },
+  {
+    path:"/admin/companies/:id",
+    element:<ProtectedRoute><CompanySetup/></ProtectedRoute> 
+  },
+  {
+    path:"/admin/jobs",
+    element:<ProtectedRoute><AdminJobs/></ProtectedRoute> 
+  },
+  {
+    path:"/admin/jobs/create",
+    element:<ProtectedRoute><PostJob/></ProtectedRoute> 
+  },
+  {
+    path:"/admin/jobs/:id/applicants",
+    element:<ProtectedRoute><Applicants/></ProtectedRoute> 
+  },
+
+])
 function App() {
-    return (
-        <ErrorBoundary>
-            <HelmetProvider>
-                <ThemeProvider>
-                    <AuthProvider>
-                        <Router>
-                            <Toaster
-                                position="top-right"
-                                toastOptions={{
-                                    style: {
-                                        background: '#0f172a',
-                                        color: '#fff',
-                                        border: '1px solid rgba(255,255,255,0.1)',
-                                    },
-                                }}
-                            />
-                            <Routes>
-                                <Route path="/" element={<LandingPage />} />
 
-                                {/* Auth */}
-                                <Route path="/login" element={<LoginPage />} />
-                                <Route path="/register" element={<RegisterPage />} />
-
-                                <Route path="/jobs" element={<JobBoard />} />
-                                <Route path="/jobs/:id" element={<JobDetailsPage />} />
-
-                                {/* Employer Routes */}
-                                <Route path="/employer/dashboard" element={<EmployerDashboard page="dashboard" />} />
-                                <Route path="/employer/post-job" element={<EmployerDashboard page="post-job" />} />
-                                <Route path="/employer/applicants" element={<EmployerDashboard page="applicants" />} />
-
-                                {/* User Routes */}
-                                <Route path="/profile" element={<ProfilePage />} />
-                                <Route path="/resume-builder" element={<ResumeBuilder />} />
-                            </Routes>
-                        </Router>
-                    </AuthProvider>
-                </ThemeProvider>
-            </HelmetProvider>
-        </ErrorBoundary>
-    );
+  return (
+    <div>
+      <RouterProvider router={appRouter} />
+    </div>
+  )
 }
 
-export default App;
+export default App
