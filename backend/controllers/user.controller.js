@@ -191,3 +191,27 @@ export const updateProfile = async (req, res) => {
         })
     }
 }
+
+export const deleteAccount = async (req, res) => {
+    try {
+        const userId = req.id;
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found.",
+                success: false
+            })
+        }
+        await User.findByIdAndDelete(userId);
+        return res.status(200).json({
+            message: "Account deleted successfully.",
+            success: true
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            message: "Internal Server Error",
+            success: false
+        })
+    }
+}

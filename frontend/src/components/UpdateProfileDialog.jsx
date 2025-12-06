@@ -9,10 +9,12 @@ import axios from 'axios'
 import { USER_API_END_POINT } from '@/utils/constant'
 import { setUser } from '@/redux/authSlice'
 import { toast } from 'sonner'
+import { useNavigate } from 'react-router-dom'
 
 const UpdateProfileDialog = ({ open, setOpen }) => {
     const [loading, setLoading] = useState(false);
     const { user } = useSelector(store => store.auth);
+    const navigate = useNavigate();
 
     const [input, setInput] = useState({
         fullname: user?.fullname || "",
@@ -66,7 +68,28 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
         console.log(input);
     }
 
-
+    const deleteAccountHandler = async () => {
+        if (!window.confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
+            return;
+        }
+        try {
+            setLoading(true);
+            const res = await axios.delete(`${USER_API_END_POINT}/delete`, {
+                withCredentials: true
+            });
+            if (res.data.success) {
+                dispatch(setUser(null));
+                toast.success(res.data.message);
+                navigate("/");
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error(error.response.data.message);
+        } finally {
+            setLoading(false);
+            setOpen(false);
+        }
+    }
 
     return (
         <div>
@@ -143,10 +166,15 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                         </div>
                         <DialogFooter>
                             {
-                                loading ? <Button className="w-full my-4"> <Loader2 className='mr-2 h-4 w-4 animate-spin' /> Please wait </Button> : <Button type="submit" className="w-full my-4">Update</Button>
+                                loading ? <Button className="w-full my-4" disabled> <Loader2 className='mr-2 h-4 w-4 animate-spin' /> Please wait </Button> : <Button type="submit" className="w-full my-4">Update</Button>
                             }
                         </DialogFooter>
                     </form>
+                    <div className="mt-4 border-t pt-4">
+                        <Button variant="destructive" onClick={deleteAccountHandler} className="w-full bg-red-600 hover:bg-red-700 text-white" disabled={loading}>
+                            {loading ? <><Loader2 className='mr-2 h-4 w-4 animate-spin' /> Deleting...</> : "Delete Account"}
+                        </Button>
+                    </div>
                 </DialogContent>
             </Dialog>
         </div>
